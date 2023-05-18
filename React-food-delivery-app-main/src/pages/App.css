@@ -1,0 +1,25 @@
+.error-message {
+    color: red;
+  }
+  .success-message {
+    color: rgb(77, 139, 76);
+  }
+  
+
+  .error-logmessage {
+    color: red;
+     font-size: smaller;
+  }
+
+  .blink {
+    color: rgb(18, 54, 27);
+    font-size: large;
+    animation: blink 1s linear infinite;
+  }
+  
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
