@@ -7,15 +7,16 @@ import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, } from 
 import app from '../../components/firebase/firebase';
 import axios from 'axios';
 import React, { useRef, useState } from "react";
-import form from '../../scenes/form/form.css'
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import Product from '../../scenes/products/Product.css'
 
 const Products = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const [productExists, setProductExists] = useState(false);
     const [Products, setCreateProduct] = useState(false);
     const [image, setImage] = useState(null);
+    const [isProductAdded, setIsProductAdded] = useState(false);
 
     const handleFormSubmit = async (values) => {
         try {
@@ -28,23 +29,33 @@ const Products = () => {
             if (true === isProductNameTaken) {
                 // Handle case when product name is already taken
                 console.log("Product name already exists!");
+                setProductExists(true);
                 return;
             }
+            else {
+                // Upload the image file to Firebase storage and get the download URL
+                const file = image;
+                const storageRef = ref(getStorage(app), `images/${file.name}`);
+                const snapshot = await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(snapshot.ref);
 
-            // Upload the image file to Firebase storage and get the download URL
-            const file = image;
-            const storageRef = ref(getStorage(app), `images/${file.name}`);
-            const snapshot = await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(snapshot.ref);
+                // Add the image download URL to the form values
+                values.imgpath = downloadURL;
 
-            // Add the image download URL to the form values
-            values.imgpath = downloadURL;
+                // Submit the form data to the server
+                await axios.post('http://localhost:8081/api/v1/product/AddProduct', values);
+                setIsProductAdded(true);
+                // Clear the form fields
+                values.title = "";
+                values.price = "";
+                values.category = "";
+                values.description = "";
+                setImage(null);
+                // Handle successful form submission
+                console.log("Form submitted successfully!");
+            }
 
-            // Submit the form data to the server
-            await axios.post('http://localhost:8081/api/v1/product/AddProduct', values);
 
-            // Handle successful form submission
-            console.log("Form submitted successfully!");
         } catch (error) {
             // Handle form submission error
             console.error("Error submitting form:", error);
@@ -64,6 +75,7 @@ const Products = () => {
     };
 
     return (
+
         <Box m="20px">
             <Header title="Add PRODUCT" subtitle="Add a New Product" />
 
@@ -160,7 +172,7 @@ const Products = () => {
                                     onChange={handleImageChange}
 
                                     accept="image/*" />
-                                {image && <img src={URL.createObjectURL(image)} alt="Uploaded Image" />}
+                                {image && <img src={URL.createObjectURL(image)} width={200} height={200} alt="Uploaded Image" />}
                             </Box>
                         </Box>
                         <Box display="flex" justifyContent="end" mt="20px">
@@ -169,6 +181,16 @@ const Products = () => {
                             </Button>
 
                         </Box>
+                        {isProductAdded && (
+                            <Box mt={2} class="ok-message" color="green">
+                                Product added successfully!
+                            </Box>
+                        )}
+                        {productExists && (
+                            <Box mt={2} class="erro-message" color="green">
+                            Product  already Added!
+                            </Box>
+                        )}
 
                     </form>
                 )}

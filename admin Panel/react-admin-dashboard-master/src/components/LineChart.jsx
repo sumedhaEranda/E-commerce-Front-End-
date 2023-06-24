@@ -2,14 +2,27 @@ import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { mockLineData as data } from "../data/mockData";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [categordata, setcategordata] = useState([]);
 
-  return (
+  useEffect(() => {
+
+
+    axios.get("http://localhost:8081/api/v1/getAllSalesOrderforCategory").then((response) => {
+      setcategordata(response.data);
+    });
+
+  }, []);
+
+  return categordata.length > 0 ? (
     <ResponsiveLine
-      data={data}
+      data={categordata}
+
       theme={{
         axis: {
           domain: {
@@ -43,15 +56,19 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
           },
         },
       }}
-      colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
+      colors={isDashboard ? {
+        datum: "color"
+      } : {
+        scheme: "nivo"
+      }} // added
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
         min: "auto",
         max: "auto",
-        stacked: true,
-        reverse: false,
+        stacked: false,
+        reverse: true,
       }}
       yFormat=" >-.2f"
       curve="catmullRom"
@@ -111,7 +128,8 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
         },
       ]}
     />
-  );
+
+  ) : null;
 };
 
 export default LineChart;

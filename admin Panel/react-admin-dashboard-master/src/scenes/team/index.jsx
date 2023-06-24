@@ -33,10 +33,9 @@ const Team = () => {
         return (
           <Box
             width="60%"
-            m="0 auto"
             p="5px"
             display="flex"
-            justifyContent="center"
+            justifyContent="flex-start"
             backgroundColor={
               roles === "admin"
                 ? colors.greenAccent[600]
@@ -49,7 +48,7 @@ const Team = () => {
             {roles === "admin" && <AdminPanelSettingsOutlinedIcon />}
             {roles === "manager" && <SecurityOutlinedIcon />}
             {roles === "user" && <LockOpenOutlinedIcon />}
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+            <Typography color={colors.grey[100]} sx={{ ml: "6px" }}>
               {roles}
             </Typography>
           </Box>

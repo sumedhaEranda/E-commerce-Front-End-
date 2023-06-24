@@ -1,0 +1,11 @@
+.ok-message{
+    font-size: x-large;
+    color: green;
+    
+}
+
+.erro-message{
+    font-size: x-large;
+    color: rgb(243, 20, 9);
+    
+}

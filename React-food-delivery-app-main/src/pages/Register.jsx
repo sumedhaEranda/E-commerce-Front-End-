@@ -4,7 +4,7 @@ import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import "./App.css";
+import "./page.css";
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, } from "firebase/auth";
 import app from '../firebase/firebase';
 
@@ -158,7 +158,7 @@ const Register = () => {
 
                 </div>
 
-                <button type="submit" className="addTOCart__btn">
+                <button type="submit" className="addTOCartbtn">
                   Sign Up
                 </button>
                 <div>

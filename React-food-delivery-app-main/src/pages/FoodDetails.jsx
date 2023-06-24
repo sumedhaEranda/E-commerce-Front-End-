@@ -13,51 +13,48 @@ import ProductCard from "../components/UI/product-card/ProductCard";
 
 const FoodDeta = () => {
 
-  
   const [product, setproduct] = useState([]);
   const [data, setData] = useState([]);
-  const {id } = useParams();
-  const productid=Number(id);
+  const { id } = useParams();
+  const productid = Number(id);
 
   //enhasment:==  id is hard coding 
   useEffect(() => {
-    
-      let apiCall = `http://localhost:8081/api/v1/product/all`;
-      fetch(apiCall)
-        .then(response => response.json())
-        .then(data => {
-          setproduct(data);
-           //enhasment:==  id is hard coding 
-          const product = data.find(item => item.pid ===productid);
-          setData(product);
-        }) 
-  
-  },[id]);
- 
+
+    let apiCall = `http://localhost:8081/api/v1/product/all`;
+    fetch(apiCall)
+      .then(response => response.json())
+      .then(data => {
+        setproduct(data);
+        //enhasment:==  id is hard coding 
+        const product = data.find(item => item.pid === productid);
+        setData(product);
+      })
+
+  }, [id]);
+
 
 
   const [tab, setTab] = useState("desc");
   const [enteredName, setEnteredName] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
   const [reviewMsg, setReviewMsg] = useState("");
- 
+
   const dispatch = useDispatch();
 
-   const [previewImg, setPreviewImg] = useState(data.imgpath);
-   const { title, category} = data;
- 
-   const relatedProduct = product.filter((item) => category === item.category);
-   console.log(relatedProduct);
+  const [previewImg, setPreviewImg] = useState(data.imgpath);
+  const { title, category } = data;
 
-
+  const relatedProduct = product.filter((item) => category === item.category);
+  console.log(relatedProduct);
 
   const addItem = () => {
     dispatch(
       cartActions.addItem({
-        id:data.pid,
-        title:data.title,
-        price:data.price,
-        imgpath:data.imgpath,
+        id: data.pid,
+        title: data.title,
+        price: data.price,
+        imgpath: data.imgpath,
       })
     );
   };
@@ -77,10 +74,8 @@ const FoodDeta = () => {
   }, [data]);
 
   return (
- 
     <Helmet title="Product-details">
-       <CommonSection title={title} /> 
-
+      <CommonSection title={title} />
       <section>
         <Container>
           <Row>
@@ -127,7 +122,7 @@ const FoodDeta = () => {
 
                 <button onClick={addItem} className="addTOCart__btn">
                   Add to Cart
-                </button> 
+                </button>
               </div>
             </Col>
 
@@ -147,7 +142,7 @@ const FoodDeta = () => {
                 </h6>
               </div>
 
-               {tab === "desc" ? (
+              {tab === "desc" ? (
                 <div className="tab__content">
                   <p>{data.description}</p>
                 </div>
@@ -204,7 +199,7 @@ const FoodDeta = () => {
                     </button>
                   </form>
                 </div>
-              )} 
+              )}
             </Col>
 
             <Col lg="12" className="mb-5 mt-4">

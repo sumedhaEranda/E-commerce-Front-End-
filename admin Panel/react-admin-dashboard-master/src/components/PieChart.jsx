@@ -2,13 +2,24 @@ import { ResponsivePie } from "@nivo/pie";
 import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
 import { mockPieData as data } from "../data/mockData";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const PieChart = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [categoryitems, setCategoryItems] = useState([]);
+  useEffect(() => {
+    axios.get("http://localhost:8081/api/v1/product/getCategoryItems").then((response) => {
+      setCategoryItems(response.data);
+    });
+    console.log(categoryitems);
+  }, []);
+
+
   return (
-    <ResponsivePie
-      data={data}
+    <ResponsivePie  
+      data={categoryitems}
       theme={{
         axis: {
           domain: {

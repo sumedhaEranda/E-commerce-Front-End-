@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
-import "./App.css";
-import { getAuth, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { Await, Link } from "react-router-dom";
+import "./page.css";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 import app from '../firebase/firebase';
 
@@ -14,7 +14,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [loginErro, setloginErro] = useState(false);
   const [verifyEmail, setverifyEmail] = useState(false);
-
+  const auth = getAuth(app);
   const handleEmailChange = (event) => {
     setloginErro(false);
     setEmail(event.target.value);
@@ -48,41 +48,42 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
       });
 
+      try {
+        const data = await response.json(); // Parse the response body as JSON
 
-      setIsLoading(false); // stop loading animation
+        console.log(data.roles);
 
-      // If the server returns a success response, redirect the user to the dashboard
-      if (response.ok) {
+        setIsLoading(false); // stop loading animation
 
-
-        const auth = getAuth(app);
-
-        setTimeout(async () => {
-          const response = await signInWithEmailAndPassword(auth, email, password);
-          if (response.user) {
-            if (response.user.emailVerified) {
-              window.location.href = '/home';
-            
-
-            } else {
-              setverifyEmail(false);
-              // Send email verification
-              await sendEmailVerification(response.user);
-              alert("Please verify your email address before logging in.");
-            }
+        // If the server returns a success response, redirect the user to the dashboard
+        if (response.ok) {
+          if (data.roles === "ROLE_ADMIN") {
+            window.location.href = "http://localhost:5000/";
           } else {
-
+            setTimeout(async () => {
+              const response = await signInWithEmailAndPassword(auth, email, password);
+              if (response.user) {
+                if (response.user.emailVerified) {
+                  window.location.href = "/home";
+                } else {
+                  setverifyEmail(true);              
+                }
+              }
+            }, 5000);
           }
-        }, 1000);
+        } else {
+          setIsLoading(false);
+          setloginErro(true);
 
-      } else {
+        }
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
         setloginErro(true);
       }
-    }, 4000);
-
+    }, 1000);
   };
 
- 
+
 
   return (
     <Helmet title="Login">
@@ -110,7 +111,7 @@ export default function Login() {
                     onChange={handlePasswordChange}
                   />
                 </div>
-                <button type="submit" className="addTOCart__btn">Login</button>
+                <button type="submit" className="addTOCartbtn">Login</button>
               </form>
               <div>
                 {verifyEmail === true && (
@@ -122,13 +123,7 @@ export default function Login() {
                   <span className="error-logmessage">invalid user name and password</span>
                 )}
               </div>
-              {isLoading && (
-                <div className="loading-container">
-                  <div className={`blink ${isLoading ? "is-blinking" : ""}`}>
-                    Please Wait..........
-                  </div>
-                </div>
-              )}
+              
               <Link to="/register">
                 Don't have an account? Create an account
               </Link>
