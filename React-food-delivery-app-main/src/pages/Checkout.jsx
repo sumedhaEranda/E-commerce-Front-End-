@@ -4,10 +4,10 @@ import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import { useSelector } from "react-redux";
 import "../styles/checkout.css";
-import { Link } from "react-router-dom";
-import ProductCard from "../components/UI/product-card/ProductCard.jsx";
+import { useNavigate  } from "react-router-dom";
 
 const Checkout = () => {
+  
   const [enterName, setEnterName] = useState("");
   const [enterEmail, setEnterEmail] = useState("");
   const [enterNumber, setEnterNumber] = useState("");
@@ -21,8 +21,8 @@ const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = cartTotalAmount + Number(shippingCost);
   const [shippingInfo, setShippingInfo] = useState([]);
-  const [orderid, setOderid] = useState('');
 
+  const navigate  = useNavigate ();
   const submitHandler = (e) => {
     e.preventDefault();
     const userShippingAddress = {
@@ -34,38 +34,18 @@ const Checkout = () => {
       totalAmount: totalAmount,
       cartItems
     };
-
-    // shippingInfo.push(userShippingAddress);
-
     setShippingInfo([...shippingInfo, userShippingAddress]);
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userShippingAddress)
-    };
-
-    fetch('http://localhost:8081/api/v1/placeOrder', requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        // Access the response data here
-        setOderid(data.orderId);
-
-        setOrderCreate(true);
-        setEnterName("");
-        setEnterEmail("");
-        setEnterNumber("");
-        setEnterAddress("");
-        setEnterCity("");
-        setPostalCode("");
-
-
-      })
-      .catch(error => {
-        console.error('Error placing the order:', error);
-        // Handle the error, if necessary
-      });
+   
+    console.log(userShippingAddress);
+     navigate('/pyment', { state: { userShippingAddress } });   
   };
-
+  const appearance = {
+    theme: 'stripe',
+  };
+  const options = {
+   
+    appearance,
+  };
   return (
     <Helmet title="Checkout">
       <CommonSection title="Checkout" />
@@ -140,9 +120,8 @@ const Checkout = () => {
                 <button type="submit" className="addTOCartbtn" >
                   Payment
                 </button>
-                <button className="addTOCartbtn" >
-                  <Link to={`/invoice/${orderid}`}>  GetINvoice</Link>
-                </button>
+                
+               
               </form>
             </Col>
 
@@ -163,6 +142,10 @@ const Checkout = () => {
 
             </Col>
 
+          </Row>
+          <Row>
+
+           
           </Row>
           <div>
 
