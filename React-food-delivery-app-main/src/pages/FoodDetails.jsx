@@ -21,7 +21,7 @@ const FoodDeta = () => {
   //enhasment:==  id is hard coding 
   useEffect(() => {
 
-    let apiCall = `http://localhost:8081/api/v1/product/all`;
+    let apiCall = `http://54.234.132.181:8081/api/v1/product/all`;
     fetch(apiCall)
       .then(response => response.json())
       .then(data => {

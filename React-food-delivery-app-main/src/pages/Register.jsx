@@ -51,7 +51,7 @@ const Register = () => {
       password: signupPasswordRef.current.value
     };
 
-    axios.post('http://localhost:8080/api/v1/user/create', data)
+    axios.post('http://54.234.132.181:8080/api/v1/user/create', data)
       .then(response => {
         setRegisterSuccess(true);
         console.log(response.data);

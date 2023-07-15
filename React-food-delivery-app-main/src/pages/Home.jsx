@@ -61,7 +61,7 @@ const Home = () => {
 
       
   const fetchTitle =  () => {
-    fetch(`http://localhost:8081/api/v1/product/all`)
+    fetch(`http://54.234.132.181:8081/api/v1/product/all`)
         .then(res => res.json())
         .then((data) =>{
           setAllProducts(data);

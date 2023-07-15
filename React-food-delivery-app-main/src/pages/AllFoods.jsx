@@ -17,7 +17,7 @@ const AllFoods = () => {
 
   const [products, setAllProducts] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:8081/api/v1/product/all")
+    fetch("http://54.234.132.181:8081/api/v1/product/all")
       .then((response) => response.json())
       .then((data) => setAllProducts(data));
       

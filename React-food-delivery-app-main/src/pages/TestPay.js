@@ -41,7 +41,7 @@ function TestPay() {
             body: JSON.stringify(shippingInfo)
         };
 
-        fetch('http://localhost:8081/api/v1/placeOrder', requestOptions)
+        fetch('http://54.234.132.181:8081/api/v1/placeOrder', requestOptions)
             .then(response => response.json())
             .then(data => {
 

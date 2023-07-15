@@ -18,7 +18,7 @@ const InvoiceForm = () => {
   const maxItemsToRender = 1;
   const orderid = id;
   useEffect(() => {
-    fetch(`http://localhost:8081/api/v1/getOrder/${orderid}`)
+    fetch(`http://54.234.132.181:8081/api/v1/getOrder/${orderid}`)
       .then((response) => response.json())
       .then((data) => setItems(data));
 

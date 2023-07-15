@@ -42,7 +42,7 @@ export default function Login() {
     // simulate a delay of 3 seconds
     setTimeout(async () => {
 
-      const response = await fetch("http://localhost:8080/api/v1/user/login", {
+      const response = await fetch("http://54.234.132.181:8080/api/v1/user/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: { "Content-Type": "application/json" },
@@ -58,7 +58,7 @@ export default function Login() {
         // If the server returns a success response, redirect the user to the dashboard
         if (response.ok) {
           if (data.roles === "ROLE_ADMIN") {
-            window.location.href = "http://localhost:5000/";
+            window.location.href = "http://54.234.132.181:5000/";
           } else {
             setTimeout(async () => {
               const response = await signInWithEmailAndPassword(auth, email, password);
